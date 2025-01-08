@@ -10,6 +10,11 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 interface MenuItem {
   title: string;
@@ -20,7 +25,7 @@ interface MenuItem {
 
 export default function Sidebar() {
   const location = useLocation();
-  const [expandedMenu, setExpandedMenu] = useState<string | null>('Dashboard');
+  const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
   const [isExpanded, setIsExpanded] = useState(true);
   const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -202,10 +207,9 @@ export default function Sidebar() {
                     )}
                   </>
                 ) : (
-                  <Tooltip>
-                    <TooltipTrigger asChild>
+                  <Popover>
+                    <PopoverTrigger asChild>
                       <button
-                        onClick={() => setExpandedMenu(expandedMenu === item.title ? null : item.title)}
                         className={cn(
                           'w-full flex items-center justify-center p-3 rounded-lg mb-1 transition-colors duration-100',
                           expandedMenu === item.title
@@ -215,25 +219,27 @@ export default function Sidebar() {
                       >
                         {item.icon}
                       </button>
-                    </TooltipTrigger>
-                    <TooltipContent side="right" className="flex flex-col gap-1">
-                      <div className="font-medium">{item.title}</div>
-                      {item.submenu?.map((sub) => (
-                        <Link
-                          key={sub.path}
-                          to={sub.path}
-                          className={cn(
-                            'block w-full text-left p-1 rounded transition-colors duration-100',
-                            location.pathname === sub.path
-                              ? 'bg-blue-600 text-white'
-                              : 'hover:bg-gray-100 dark:hover:bg-[#242424] hover:text-blue-600 text-gray-600 dark:text-gray-400'
-                          )}
-                        >
-                          {sub.title}
-                        </Link>
-                      ))}
-                    </TooltipContent>
-                  </Tooltip>
+                    </PopoverTrigger>
+                    <PopoverContent side="right" className="p-2">
+                      <div className="font-medium mb-2">{item.title}</div>
+                      <div className="space-y-1">
+                        {item.submenu?.map((sub) => (
+                          <Link
+                            key={sub.path}
+                            to={sub.path}
+                            className={cn(
+                              'block w-full text-left p-2 rounded transition-colors duration-100',
+                              location.pathname === sub.path
+                                ? 'bg-blue-600 text-white'
+                                : 'hover:bg-gray-100 dark:hover:bg-[#242424] hover:text-blue-600 text-gray-600 dark:text-gray-400'
+                            )}
+                          >
+                            {sub.title}
+                          </Link>
+                        ))}
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                 )}
               </div>
             ))}
