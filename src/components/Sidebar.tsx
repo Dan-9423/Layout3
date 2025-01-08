@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Plus, Minus, LayoutDashboard, Users, Settings, BarChart2, FileText, LogOut, Home, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -16,11 +16,28 @@ export default function Sidebar() {
   const location = useLocation();
   const [expandedMenu, setExpandedMenu] = useState<string | null>('Dashboard');
   const [isExpanded, setIsExpanded] = useState(true);
+  const [currentTime, setCurrentTime] = useState(new Date());
 
-  const currentDate = new Date().toLocaleDateString('pt-BR', {
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const currentDate = currentTime.toLocaleDateString('pt-BR', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric'
+  });
+
+  const currentTimeStr = currentTime.toLocaleTimeString('pt-BR', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+    timeZone: 'America/Sao_Paulo'
   });
 
   const menuItems: MenuItem[] = [
@@ -84,18 +101,33 @@ export default function Sidebar() {
         </div>
       </div>
 
-      {/* Collapse Button and Date */}
+      {/* Date, Time and Collapse Button */}
       <div className="px-4 py-2 flex items-center justify-between border-b border-gray-200 dark:border-gray-800">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="hover:bg-gray-100 dark:hover:bg-gray-800"
-        >
-          {isExpanded ? <ChevronLeft className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
-        </Button>
-        {isExpanded && (
-          <span className="text-sm text-gray-500 dark:text-gray-400">{currentDate}</span>
+        {isExpanded ? (
+          <>
+            <div className="flex items-center space-x-2">
+              <span className="text-sm text-gray-500 dark:text-gray-400">{currentDate}</span>
+              <div className="h-4 w-px bg-gray-300 dark:bg-gray-700" />
+              <span className="text-sm text-gray-500 dark:text-gray-400">{currentTimeStr}</span>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="hover:bg-gray-100 dark:hover:bg-gray-800"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </Button>
+          </>
+        ) : (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="hover:bg-gray-100 dark:hover:bg-gray-800 w-full"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </Button>
         )}
       </div>
 

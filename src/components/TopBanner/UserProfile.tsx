@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { LogOut, Settings, User } from 'lucide-react';
+import { LogOut, Settings, User, ChevronDown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import {
   DropdownMenu,
@@ -19,7 +19,7 @@ export default function UserProfile() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+      <DropdownMenuTrigger className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors group">
         <div className="flex items-center gap-3">
           <Avatar className="h-10 w-10">
             <AvatarImage src={user.avatar} alt={user.name} />
@@ -29,6 +29,7 @@ export default function UserProfile() {
             <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{user.name}</p>
             <p className="text-xs text-gray-500 dark:text-gray-400">{user.email}</p>
           </div>
+          <ChevronDown className="h-4 w-4 text-gray-500 dark:text-gray-400 transition-transform group-data-[state=open]:rotate-180" />
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">

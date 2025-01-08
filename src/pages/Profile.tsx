@@ -6,6 +6,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -47,6 +54,7 @@ export default function Profile() {
     email: 'joao.silva@exemplo.com',
     phone: '(11) 98765-4321',
     role: 'Administrador',
+    gender: localStorage.getItem('userGender') || 'male',
     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
   });
 
@@ -61,6 +69,12 @@ export default function Profile() {
     newPassword: '',
     confirmPassword: ''
   });
+
+  const handleGenderChange = (value: string) => {
+    setUser(prev => ({ ...prev, gender: value }));
+    setEditedUser(prev => ({ ...prev, gender: value }));
+    localStorage.setItem('userGender', value);
+  };
 
   const handleSave = () => {
     setUser(editedUser);
@@ -188,6 +202,24 @@ export default function Profile() {
               disabled={!isEditing}
             />
           </div>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="gender">Gênero</Label>
+          <Select
+            value={isEditing ? editedUser.gender : user.gender}
+            onValueChange={handleGenderChange}
+            disabled={!isEditing}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Selecione seu gênero" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="male">Masculino</SelectItem>
+              <SelectItem value="female">Feminino</SelectItem>
+              <SelectItem value="other">Outro</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="space-y-2">
