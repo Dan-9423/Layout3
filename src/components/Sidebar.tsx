@@ -17,6 +17,12 @@ export default function Sidebar() {
   const [expandedMenu, setExpandedMenu] = useState<string | null>('Dashboard');
   const [isExpanded, setIsExpanded] = useState(true);
 
+  const currentDate = new Date().toLocaleDateString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  });
+
   const menuItems: MenuItem[] = [
     {
       title: 'Início',
@@ -76,6 +82,21 @@ export default function Sidebar() {
         <div className="flex items-center justify-center">
           <Logo iconOnly={!isExpanded} />
         </div>
+      </div>
+
+      {/* Collapse Button and Date */}
+      <div className="px-4 py-2 flex items-center justify-between border-b border-gray-200 dark:border-gray-800">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="hover:bg-gray-100 dark:hover:bg-gray-800"
+        >
+          {isExpanded ? <ChevronLeft className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
+        </Button>
+        {isExpanded && (
+          <span className="text-sm text-gray-500 dark:text-gray-400">{currentDate}</span>
+        )}
       </div>
 
       {/* Menu Section */}
@@ -146,16 +167,8 @@ export default function Sidebar() {
         </nav>
       </div>
 
-      {/* Footer Section with Collapse Button and Logout */}
-      <div className="p-4 border-t border-gray-200 dark:border-gray-800 space-y-2">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="w-full flex items-center justify-center p-2 hover:bg-gray-100 dark:hover:bg-gray-800"
-        >
-          {isExpanded ? <ChevronLeft className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
-        </Button>
+      {/* Footer Section with Logout */}
+      <div className="p-4 border-t border-gray-200 dark:border-gray-800">
         <Button
           variant="ghost"
           className={cn(
