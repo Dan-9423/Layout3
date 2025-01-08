@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Camera, ChevronDown, KeyRound, Mail } from 'lucide-react';
+import { useUser } from '@/contexts/UserContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -43,21 +44,11 @@ const countries: Country[] = [
 export default function Profile() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user, updateUser } = useUser();
   const [isEditing, setIsEditing] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(countries[0]);
   const [showEmailChange, setShowEmailChange] = useState(false);
   const [showPasswordChange, setShowPasswordChange] = useState(false);
-  
-  const [user, setUser] = useState({
-    firstName: 'João',
-    lastName: 'Silva',
-    email: 'joao.silva@exemplo.com',
-    phone: '(11) 98765-4321',
-    role: 'Administrador',
-    gender: localStorage.getItem('userGender') || 'male',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-  });
-
   const [editedUser, setEditedUser] = useState(user);
   const [emailForm, setEmailForm] = useState({
     currentEmail: '',
@@ -71,13 +62,12 @@ export default function Profile() {
   });
 
   const handleGenderChange = (value: string) => {
-    setUser(prev => ({ ...prev, gender: value }));
     setEditedUser(prev => ({ ...prev, gender: value }));
     localStorage.setItem('userGender', value);
   };
 
   const handleSave = () => {
-    setUser(editedUser);
+    updateUser(editedUser);
     setIsEditing(false);
     toast({
       title: "Perfil atualizado",
@@ -91,11 +81,14 @@ export default function Profile() {
   };
 
   const handleEmailChange = () => {
-    setShowEmailChange(false);
-    toast({
-      title: "E-mail atualizado",
-      description: "Seu e-mail foi atualizado com sucesso.",
-    });
+    if (emailForm.newEmail === emailForm.confirmEmail) {
+      updateUser({ email: emailForm.newEmail });
+      setShowEmailChange(false);
+      toast({
+        title: "E-mail atualizado",
+        description: "Seu e-mail foi atualizado com sucesso.",
+      });
+    }
   };
 
   const handlePasswordChange = () => {

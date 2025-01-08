@@ -220,15 +220,18 @@ export default function Sidebar() {
                         {item.icon}
                       </button>
                     </PopoverTrigger>
-                    <PopoverContent side="right" className="p-2">
-                      <div className="font-medium mb-2">{item.title}</div>
+                    <PopoverContent side="right" className="p-2 w-48">
+                      <div className="flex items-center gap-2 px-2 py-1.5 mb-2 text-sm font-medium border-b border-gray-100 dark:border-gray-800">
+                        {item.icon}
+                        {item.title}
+                      </div>
                       <div className="space-y-1">
                         {item.submenu?.map((sub) => (
                           <Link
                             key={sub.path}
                             to={sub.path}
                             className={cn(
-                              'block w-full text-left p-2 rounded transition-colors duration-100',
+                              'block w-full text-left px-2 py-1.5 rounded text-sm transition-colors duration-100',
                               location.pathname === sub.path
                                 ? 'bg-blue-600 text-white'
                                 : 'hover:bg-gray-100 dark:hover:bg-[#242424] hover:text-blue-600 text-gray-600 dark:text-gray-400'

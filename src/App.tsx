@@ -1,4 +1,5 @@
 import { ThemeProvider } from './components/ThemeProvider';
+import { UserProvider } from './contexts/UserContext';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import TopBanner from './components/TopBanner';
@@ -31,7 +32,9 @@ function App() {
   return (
     <Router>
       <ThemeProvider>
-        <AppContent />
+        <UserProvider>
+          <AppContent />
+        </UserProvider>
       </ThemeProvider>
     </Router>
   );
