@@ -8,7 +8,7 @@ import Profile from './pages/Profile';
 
 function AppContent() {
   const location = useLocation();
-  const showDashboardNav = location.pathname !== '/profile';
+  const showDashboardNav = !['/profile', '/', '/settings'].includes(location.pathname);
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-[#111111]">
